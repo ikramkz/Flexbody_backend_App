@@ -35,7 +35,7 @@ function getLocalIPAddress() {
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI)
+  .connect("mongodb+srv://makram_db_user:SJEeYYBLpGbMPci3@cluster0.hnz87j1.mongodb.net/flexbody?appName=Cluster0")
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("DB Error:", err));
 
