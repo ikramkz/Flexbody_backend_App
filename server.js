@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config('./.env');
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -35,7 +35,7 @@ function getLocalIPAddress() {
 
 // Connect to MongoDB
 mongoose
-  .connect("mongodb+srv://makram_db_user:SJEeYYBLpGbMPci3@cluster0.hnz87j1.mongodb.net/flexbody?appName=Cluster0")
+  .connect(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log("DB Error:", err));
 
