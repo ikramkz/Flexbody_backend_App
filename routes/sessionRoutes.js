@@ -261,7 +261,32 @@ router.post("/save-session", async (req, res) => {
 router.get("/all-sessions", async (req, res) => {
     try {
       const data = await Session.find();
-      return res.json({ success: true, sessions: data });
+      
+      // Transform data to required format
+      const formattedData = data.map((session, index) => {
+        // Transform exercise_history to include only required fields
+        const exerciseHistory = session.exercise_history.map((exercise) => ({
+          exercise_type: exercise.exercise_type || null,
+          current_total_score: exercise.current_total_score ?? null,
+          last_total_score: exercise.last_total_score ?? null,
+          duration: exercise.duration || null,
+          current_romLeft: exercise.current_romLeft ?? null,
+          last_romLeft: exercise.last_romLeft ?? null,
+          current_romRight: exercise.current_romRight ?? null,
+          last_romRight: exercise.last_romRight ?? null
+        }));
+
+        return {
+          id: index + 1,
+          name: `${session.patient_first_name || ""} ${session.patient_last_name || ""}`.trim() || null,
+          phone: session.patient_mobile_no || null,
+          injuryType: session.patient_injuries || null,
+          date: session.patient_DOB || null,
+          exercise_history: exerciseHistory
+        };
+      });
+
+      return res.json(formattedData);
     } catch (err) {
       return res.status(500).json({ success: false, error: err.message });
     }
