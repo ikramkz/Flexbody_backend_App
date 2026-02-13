@@ -489,6 +489,8 @@ router.get("/all-sessions", async (req, res) => {
           phone: session.patient_mobile_no || null,
           injuryType: session.patient_injuries || null,
           date: session.patient_DOB || null,
+          goals: session.patient_goals || null,
+          areaFocus: session.patient_area_focus || null,
           exercise_history: exerciseHistory
         };
       });
