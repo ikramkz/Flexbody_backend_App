@@ -556,6 +556,53 @@ router.get("/session", async (req, res) => {
     }
   });
   
-  
+
+// ---------------------------------------------------------------------------
+// API 4: Check if Mobile Number Exists
+// --------------------------------------------------------------------------
+
+router.get("/check-mobile", async (req, res) => {
+  try {
+    const { patient_mobile_no } = req.query;
+
+    if (!patient_mobile_no) {
+      return res.status(400).json({
+        success: false,
+        message: "patient_mobile_no is required"
+      });
+    }
+
+    // Check if patient exists
+    const patient = await Session.findOne({ patient_mobile_no });
+
+    if (!patient) {
+      return res.json({
+        success: true,
+        exists: false,
+        message: "Mobile number not found"
+      });
+    }
+
+    // Return patient exists with basic info
+    return res.json({
+      success: true,
+      exists: true,
+      message: "Mobile number found",
+      patient: {
+        patient_mobile_no: patient.patient_mobile_no,
+        patient_first_name: patient.patient_first_name,
+        patient_last_name: patient.patient_last_name,
+        patient_DOB: patient.patient_DOB,
+        patient_goals: patient.patient_goals,
+        patient_injuries: patient.patient_injuries,
+        patient_area_focus: patient.patient_area_focus
+      }
+    });
+
+  } catch (err) {
+    return res.status(500).json({ success: false, error: err.message });
+  }
+});
+
 
 module.exports = router;
